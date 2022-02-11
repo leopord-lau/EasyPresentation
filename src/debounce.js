@@ -10,4 +10,4 @@ const debounce = (fn, delay) => {
 
 document.body.addEventListener('click', debounce(()=> {
   console.log('log')
-}, 5000))
+}, 1000))
