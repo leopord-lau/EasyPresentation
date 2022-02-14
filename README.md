@@ -171,13 +171,72 @@ function createObject() {
   // 确保返回值是一个对象
   return typeof ret === "object" ? result : obj;
 }
-
-function Person(name, age) {
-  this.name = name;
-  this.age = age;
-}
-
-const leo = createObject(Person, 'leo', 25)
 ```
 
 
+## 实现`call`方法
+
+我们都很清楚`call`这个方法就是用于修改`this`指向，但是有些同学可能不太懂其原理，我们来手写一个`call`方法帮助深入了解其原理。
+
+```js
+Function.prototype.mycall = function(context) {
+  // 默认上下文为window
+  context = context || window;
+  // 添加一个属性用于保存当前调用call的函数
+  context.fn = this;
+  // 将arguments转变成数组并移除第一个参数（上下文）
+  const args = [...arguments].slice(1);
+  // 这样调用函数时该函数内部的this就指向调用者（context）;
+  const result = context.fn(...args);
+  delete context.fn;
+  return result;
+}
+```
+
+## 实现`apply`方法
+`apply`原理与`call`很相似，唯一不同就是传参问题，`apply`方法的第二个参数是所有参数组合成的数组，而`call`方法除了第一个参数是`context`外，其他都是传入的参数。
+
+```js
+Function.prototype.myapply = function(context, arr) {
+  // 默认上下文为window
+  context = context || window;
+  // 添加一个属性用于保存当前调用call的函数
+  context.fn = this;
+  // 将arguments转变成数组并移除第一个参数（上下文）
+  let result;
+  if(!arr) {
+    result = context.fn();
+  } else {
+    result = context.fn(arr);
+  }
+  delete context.fn;
+  return result;
+}
+```
+
+## 实现`bind`方法
+
+相对于`call`和`apply`而言，`bind`方法的返回值是一个改变了`this`的函数（即非立即调用）。**当返回的函数被当作构造函数使用时，`this`失效，但是传入的参数依旧有效。**
+
+> bind() 方法会创建一个新函数。当这个新函数被调用时，bind() 的第一个参数将作为它运行时的 this，之后的一序列参数将会在传递的实参前传入作为它的参数。
+
+```js
+Function.prototype.mybind = function(context) {
+  if(typeof this !== 'function') {
+    throw new Error('Uncaught TypeError: not a function')
+  }
+
+  const args = [...arguments].slice(1);
+  // 用于记录当前传入的函数的prototype;
+  let Transit = function() {};
+  const _ = this;
+  const FunctionToBind = function() {
+    const bindArgs = [...arguments];
+    return _.apply(this instanceof Transit ? this : context, args.concat(bindArgs));
+  }
+  // 记录当前传入的函数的prototype;
+  Transit.prototype = this.prototype;
+  FunctionToBind.prototype = new Transit();
+  return FunctionToBind;
+}
+```
