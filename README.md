@@ -124,12 +124,20 @@ const throttle3 = (fn, delay, isImmediate) => {
 
 ## 深克隆
 
-我们最常用的是`JSON.parse(JSON.stringify(obj))`这样的方式来实现克隆，但是这个方式其实存在一些局限。
+```js
+function deepCopy(obj) {
+  if(typeof obj !== 'object') {
+    return obj;
+  };
 
-比如：
-- 无法实现对函数 、`RegExp`等特殊对象的克隆
-- 会抛弃原始对象的构造函数, 并指向`Object`
-- 当对象循环引用时，会报错
+  let cloneObj = obj.constructor=== Array ? [] : {};
+  for(let property in obj) {
+    cloneObj[property] = typeof obj[property] === 'object' ? deepCopy(obj[property]) : obj[property];
+  }
+  return cloneObj;
+}
+```
+
 
 ## `instanceOf`
 
