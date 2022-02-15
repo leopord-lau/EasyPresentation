@@ -240,3 +240,47 @@ Function.prototype.mybind = function(context) {
   return FunctionToBind;
 }
 ```
+
+## 实现`Object.create`方法
+`Object.create()` 方法创建一个新对象，使用现有的对象来提供新创建的对象的`__proto__`。
+
+>语法：`Object.create(proto[, propertiesObject])`
+>`proto` : 必须。表示新建对象的原型对象，即该参数会被赋值到目标对象(即新对象，或说是最后返回的对象)的原型上。该参数可以是`null`， 对象， 函数的`prototype`属性 （创建空的对象时需传`null` , 否则会抛出`TypeError`异常）
+>`propertiesObject` : 可选。 添加到新创建对象的可枚举属性（即其自身的属性，而不是原型链上的枚举属性）对象的属性描述符以及相应的属性名称。这些属性对应`Object.defineProperties()`的第二个参数，**创建非空对象的属性描述符默认是为`false`的，而构造函数或字面量方法创建的对象属性的描述符默认为`true`**。
+
+`new`关键词是通过构造函数来创建对象, 添加的属性是在自身实例下。
+`Object.create()`创建对象的另一种方式，可以理解为继承一个对象, 添加的属性是在原型下。
+
+```js
+// new Object() 方式创建
+var a = {  rep : 'apple' }
+var b = new Object(a)
+console.log(b) // {rep: "apple"}
+console.log(b.__proto__) // {}
+console.log(b.rep) // {rep: "apple"}
+
+// Object.create() 方式创建
+var a = { rep: 'apple' }
+var b = Object.create(a)
+console.log(b)  // {}
+console.log(b.__proto__) // {rep: "apple"}
+console.log(b.rep) // {rep: "apple"}
+```
+
+上面讲了这么多`Object.create`的知识，下面我们实现一下该方法：
+```js
+Object.prototype.mycreate = function(proto, propertiesObject) {
+  function F() {};
+  F.prototype = proto;
+  const obj = new F();
+  if(propertiesObject) {
+    Object.defineProperties(obj, propertiesObject);
+  }
+  return obj
+}
+```
+实现原理就是通过创建一个空构造函数并把其`prototype`指向传入的对象，最后返回该构造函数的实例。
+
+
+
+**代码地址：[https://github.com/leopord-lau/EasyPresentation](https://github.com/leopord-lau/EasyPresentation)**
