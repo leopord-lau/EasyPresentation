@@ -399,5 +399,24 @@ MyPromise.prototype.then = function(onFulfilled, onRejeceted) {
 }
 ```
 
+## 数组扁平化
+Array的方法flat很多浏览器还未能实现，而且浏览器支持的flat方法不能处理嵌套的数组。写一个flat方法，实现扁平化嵌套数组。
+
+```js
+// 最简单的方案
+Array.prototype.flat = function (arr) {
+  return arr
+    .toString()
+    .split(',')
+    .map((item) => +item);
+};
+
+Array.prototype.flat = function (arr) {
+  return arr.reduce((prev, item) => {
+    return prev.concat(Array.isArray(item) ? flatten(item) : item);
+  }, []);
+};
+
+```
 
 **代码地址：[https://github.com/leopord-lau/EasyPresentation](https://github.com/leopord-lau/EasyPresentation)**
