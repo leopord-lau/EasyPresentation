@@ -467,8 +467,46 @@ function delRepeat(arr) {
   });
   return newArr;
 }
-
 ```
 
+## 实现冒泡排序
+
+原理：比较两个相邻的元素，将值大的元素交换到右边.
+
+流程：
+
+依次比较相邻的两个数，将比较小的数放在前面，比较大的数放在后面。
+
+1. 第一次比较：首先比较第一和第二个数，将小数放在前面，将大数放在后面。
+
+2. 比较第2和第3个数，将小数 放在前面，大数放在后面。
+
+2. ......
+
+3. 如此继续，知道比较到最后的两个数，将小数放在前面，大数放在后面，重复步骤，直至全部排序完成
+
+4. 在上面一趟比较完成后，最后一个数一定是数组中最大的一个数，所以在比较第二趟的时候，最后一个数是不参加比较的。
+
+5. 在第二趟比较完成后，倒数第二个数也一定是数组中倒数第二大数，所以在第三趟的比较中，最后两个数是不参与比较的。
+
+6. 依次类推，每一趟比较次数减少依次
+
+升序：
+```js
+function bubbleSort(array) {
+  const length = array.length;
+  for(let i = 0; i < length - 1; i++) {
+    for(let j = 0; j < length - 1 - i; j++) {
+      if(array[j] > array[j + 1]) {
+        let temp = array[j + 1];
+        array[j + 1] = array[j];
+        array[j] = temp;
+      }
+    }
+  }
+  return array;
+}
+```
+对于降序而言就是将`if`判断中的条件改成 `array[j] < array[j + 1]`
 
 **代码地址：[https://github.com/leopord-lau/EasyPresentation](https://github.com/leopord-lau/EasyPresentation)**
