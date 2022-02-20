@@ -568,4 +568,27 @@ function swap(array, left, right) {
 }
 ```
 
+## 插入排序
+
+将数组的第一个数认为是有序数组，从后往前（从前往后）扫描该有序数组，把数组中其余`n-1`个数，根据数值的大小，插入到有序数组中，直至数组中的所有数有序排列为止。这样的话，`n`个元素需要进行`n-1`趟排序。
+
+```js
+function insertionSort(array) {
+  const length = array.length;
+  let prevIndex, current;
+  // 从索引1开始
+  for(let i = 1; i < length; i++) {
+    prevIndex = i - 1;
+    current = array[i];
+    // 当前的值比前一个小
+    while(prevIndex >= 0 && array[prevIndex] > current) {
+      array[prevIndex + 1] = array[prevIndex];
+      prevIndex--;
+    }
+    array[prevIndex + 1] = current;
+  }
+  return array;
+}
+```
+
 **代码地址：[https://github.com/leopord-lau/EasyPresentation](https://github.com/leopord-lau/EasyPresentation)**
