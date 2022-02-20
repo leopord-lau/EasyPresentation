@@ -489,7 +489,9 @@ function delRepeat(arr) {
 
 5. 在第二趟比较完成后，倒数第二个数也一定是数组中倒数第二大数，所以在第三趟的比较中，最后两个数是不参与比较的。
 
-6. 依次类推，每一趟比较次数减少依次
+6. 依次类推，每一趟比较次数减少依次。
+
+冒泡排序总的平均时间复杂度为：O(n2) ,时间复杂度和数据状况无关。
 
 升序：
 ```js
@@ -507,6 +509,63 @@ function bubbleSort(array) {
   return array;
 }
 ```
-对于降序而言就是将`if`判断中的条件改成 `array[j] < array[j + 1]`
+对于降序而言就是将`if`判断中的条件改成 `array[j] < array[j + 1]`。
+
+## 实现快速排序
+
+流程：
+
+1. 先从数列中取出一个数作为基准数
+
+2. 分区过程，将比这个数大的数全放到它的右边，小于或等于它的数全放到它的左边
+
+3. 再对左右区间重复第二步，直到各区间只有一个数
+
+时间复杂度：
+
+最好：O(n log_{2} n)
+最坏：O(n^2)
+平均：O(n log_{2} n)
+
+```js
+function quickSort(array, left, right) {
+  let index;
+
+  if(array.length > 1) {
+    index = split(array, left, right);
+    if(left < index - 1) {
+      quickSort(array, left, index - 1);
+    }
+    if(index < right) {
+      quickSort(array, index, right);
+    }
+  }
+  return array;
+}
+
+function split(array, left, right) {
+  let mid = array[(left + right) >> 1];
+  while(left <= right) {
+    while(array[left] < mid) {
+      left++;
+    }
+    while(array[right] > mid) {
+      right--;
+    }
+    if(left <= right) {
+      swap(array, left, right);
+      left++;
+      right--;
+    }
+  }
+  return left;
+}
+
+function swap(array, left, right) {
+  let temp = array[right];
+  array[right] = array[left];
+  array[left] = temp;
+}
+```
 
 **代码地址：[https://github.com/leopord-lau/EasyPresentation](https://github.com/leopord-lau/EasyPresentation)**
