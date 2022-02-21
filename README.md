@@ -591,4 +591,29 @@ function insertionSort(array) {
 }
 ```
 
+## 选择排序
+
+首先在未排序的数列中找到最小(or最大)元素，然后将其存放到数列的起始位置；接着，再从剩余未排序的元素中继续寻找最小(or最大)元素，然后放到已排序序列的末尾。以此类推，直到所有元素均排序完毕。
+
+```js
+function selectionSort(array) {
+  const length = array.length;
+  let minIndex, temp;
+
+  for (let i = 0; i < length - 1; i++) {
+    minIndex = i;
+    // 从i后边开始找到最小的数的索引，然后交换
+    for (let j = i + 1; j < length; j++) {
+      if (array[j] < array[minIndex]) {
+        minIndex = j;
+      }
+    }
+    temp = array[i];
+    array[i] = array[minIndex];
+    array[minIndex] = temp;
+  }
+  return array;
+}
+```
+
 **代码地址：[https://github.com/leopord-lau/EasyPresentation](https://github.com/leopord-lau/EasyPresentation)**
